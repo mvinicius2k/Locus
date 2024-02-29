@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Locus": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7109"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 31553,
+      "useSSL": false
+    }
+  }
+}

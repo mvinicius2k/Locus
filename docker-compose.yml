@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    networks:
+      - sql-network
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=server=mariadb_db_container;user=root;password=Admin1234;database=api-db
+
+  mariadb_db_container:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: Admin1234
+    networks:
+      - sql-network
+    ports:
+      - 3306:3306
+
+  adminer_container:
+    image: adminer:latest
+    restart: always
+    networks:
+      - sql-network
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb_db_container
+    ports:
+      - 8080:8080
+
+
+networks: 
+  sql-network:
+    driver: bridge
