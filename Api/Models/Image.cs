@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace Api.Models
 {
-    public class Resource : IModel<int>
+    public class Image : IModel<int>
     {
         public int Id { get; set; }
         public string Path { get; set; }
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; }
         public DateTime UploadedAt { get; set; }
 
-        public User Owner { get; set; }
-        public ICollection<Post> UsedByPosts { get; set; }
+        public virtual User Owner { get; set; }
+        public virtual ICollection<Post> UsedByPosts { get; set; }
+        public virtual ICollection<Group> UserByGroups { get; set; }
+        
        
 
         public int GetId()

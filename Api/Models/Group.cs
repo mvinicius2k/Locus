@@ -10,7 +10,8 @@ public class Group : IModel<int>
 
     public int ImageId { get; set; }
 
-    public virtual ICollection<UserRoles> UserRoles { get; set; }
+    public virtual ICollection<UserRole> UserRoles { get; set; }
+    public virtual Image Image { get; set; }
 
 
     public int GetId()

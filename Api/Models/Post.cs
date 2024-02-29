@@ -17,7 +17,7 @@ namespace Api.Models
         public virtual User Owner { get; set; }
 
 
-        public virtual Resource FeaturedImage { get; set; }
+        public virtual Image FeaturedImage { get; set; }
 
         public virtual ICollection<PostTag> PostTags { get; set; }
 

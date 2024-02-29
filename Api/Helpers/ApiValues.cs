@@ -8,6 +8,6 @@ namespace Api.Helpers
 {
     public static class ApiValues
     {
-        public const string ConnectionKey = "ConnectionKey";
+        public const string ConnectionKey = "ConnectionString";
     }
 }

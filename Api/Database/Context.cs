@@ -12,17 +12,27 @@ using System.Threading.Tasks;
 
 namespace Api.Database
 {
+    public class OtherContext : DbContext
+    {
+        public OtherContext(DbContextOptions options) : base(options)
+        {
+        }
+    }
 
-
-    public class Context : IdentityDbContext<User, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, UserRoles, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    public class Context : IdentityDbContext<User, IdentityRole, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public DbSet<Group> Groups { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
-        public DbSet<Resource> Resources { get; set; }
+        public DbSet<Image> Resources { get; set; }
         public DbSet<Tag> Tags { get; set; }
 
         public Context(DbContextOptions options) : base(options)
+        {
+
+        }
+
+        public Context()
         {
 
         }
@@ -44,6 +54,9 @@ namespace Api.Database
 
             mb.Entity<Tag>().Property(t => t.Name)
                 .HasMaxLength(Values.Entity.TagNameMaxLength);
+            mb.Entity<Tag>().HasKey(t => t.Name);
+                
+
 
             mb.Entity<User>().Property(t => t.PresentationName)
                 .HasMaxLength(Values.Entity.UserPresentationNameMaxLength);
@@ -52,10 +65,10 @@ namespace Api.Database
                 .HasMaxLength(Values.Entity.TagNameMaxLength);
             mb.Entity<PostTag>().HasKey(pt => new { pt.TagName, pt.PostId });
 
-            mb.Entity<Resource>().Property(r => r.Path)
+            mb.Entity<Image>().Property(r => r.Path)
                 .HasMaxLength(Values.Entity.ResourcePathMaxLength);
 
-            mb.Entity<UserRoles>().HasKey(ur => new { ur.UserId, ur.RoleId, ur.GroupId });
+            mb.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId, ur.GroupId });
 
             
             
@@ -85,7 +98,9 @@ namespace Api.Database
                 .HasMany(t => t.PostTags)
                 .WithOne(pt => pt.Tag)
                 .OnDelete(DeleteBehavior.Cascade); ;
-
+            mb.Entity<Group>()
+                .HasOne(g => g.Image)
+                .WithMany(im => im.UserByGroups);
                 
                 
 

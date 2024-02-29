@@ -8,8 +8,14 @@ using Api.Helpers;
 using Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 const bool Restart = true;
+
+//#if DEBUG
+//while(!Debugger.IsAttached)
+//    Thread.Sleep(100);
+//#endif
 
 var builder = new HostBuilder()
     .ConfigureFunctionsWebApplication(w =>
@@ -25,8 +31,6 @@ var builder = new HostBuilder()
         //Serviços de database
         services.AddDbContext<Context>(opt =>
         {
-            var environmentVariables = System.Environment.GetEnvironmentVariables();
-            var children = hostContext.Configuration.GetChildren();
             var connectionString = hostContext.Configuration.GetSection(ApiValues.ConnectionKey).Value ?? throw new Exception("String de conexão inválida");
             var version = new MariaDbServerVersion(new Version("10.6"));
             opt.UseMySql(connectionString, version);

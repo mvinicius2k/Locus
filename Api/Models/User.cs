@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Api.Models
 {
-    public class User : IdentityUser<Guid>, IModel<Guid>
+    public class User : IdentityUser, IModel<string>
     {
         public string PresentationName { get; set; }
-        public ICollection<Resource> Resources { get; set; }
+        public ICollection<Image> Resources { get; set; }
         public ICollection<Post> Posts { get; set; }
 
-        public Guid GetId()
+        public string GetId()
             => base.Id;
 
-        public void SetId(Guid value)
+        public void SetId(string value)
             => base.Id = value;
     }
 }

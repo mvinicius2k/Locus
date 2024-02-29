@@ -4,6 +4,7 @@ namespace Api.Models
 {
     public class Tag : IModel<string>
     {
+        
         public string Name { get; set; }
 
         public virtual ICollection<PostTag> PostTags { get; set; }

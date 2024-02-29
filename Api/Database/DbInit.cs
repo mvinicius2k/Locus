@@ -13,6 +13,11 @@ namespace Api.Database
         private readonly ILogger<DbInit> _logger;
         private readonly Context _context;
 
+        public DbInit(ILogger<DbInit> logger, Context context)
+        {
+            _logger = logger;
+            _context = context;
+        }
 
         public async Task Prepare(bool restart = false)
         {
