@@ -26,5 +26,10 @@ namespace Shared
 
 
         }
+
+        public static partial class Api
+        {
+            public static readonly Uri RequestFreeImageHostUrl = new Uri("https://freeimage.host/api/1/upload");
+        }
     }
 }
