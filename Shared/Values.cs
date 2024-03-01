@@ -30,7 +30,7 @@ namespace Shared
 
         public static class Api
         {
-            public static readonly Uri RequestFreeImageHostUrl = new Uri("https://freeimage.host/api/1/upload");
+            public const string RequestFreeImageHostRoute = $"https://freeimage.host/api/1/upload?key={{key}}";
         }
 
         public static class File

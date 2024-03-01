@@ -11,7 +11,7 @@ namespace Tests.Helpers
 {
     public static class ImageUtils
     {
-        public static readonly string FolderPath = Path.Combine("src", "imagesdb");
+        public static readonly string FolderPath = Path.Combine("src", "imagedb");
 
 
         public static FileInfo[] GetRandonly(Random random)

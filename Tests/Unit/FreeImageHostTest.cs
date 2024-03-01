@@ -23,7 +23,6 @@ public class FreeImageHostTest : IClassFixture<MinimalLogger>
 
     public FreeImageHostTest(MinimalLogger logger)
     {
-        var mock = new Mock<FreeImageHost>();
         _minimalLogger = logger;
 
         var serviceLogger = _minimalLogger.GetInstance<FreeImageHost>();
@@ -37,9 +36,11 @@ public class FreeImageHostTest : IClassFixture<MinimalLogger>
     //}
 
     [Theory, MemberData(nameof(SupportedImagesParams))]
-    public async Task Upload_Supported_Image_Should_Be_Sucess(byte[] imageBytes, string filename)
+    public async Task Upload_Supported_Image_Should_Be_Sucess(string fileFullPath)
     {
-        var response = await _freeImageHost.Send(imageBytes, filename);
+        //Avif e nem bmp são suportados
+        var imageBytes = File.ReadAllBytes(fileFullPath);
+        var response = await _freeImageHost.Send(imageBytes, Path.GetFileName(fileFullPath));
         
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
         response.Result.Should().NotBeNull();
@@ -53,21 +54,12 @@ public class FreeImageHostTest : IClassFixture<MinimalLogger>
     {
         var random = new Random(10);
         var allImages = ImageUtils.GetRandonly(random);
-        var uniqueImages = allImages.DistinctBy(im => MimeUtility.GetMimeMapping(im.Extension)).Select(im =>
-        {
-            using (var fs = im.OpenRead())
-            using (var ms = new MemoryStream())
-            {
-                ms.CopyTo(ms);
-                (FileInfo fileInfo, byte[] bytes) tuple = (im, ms.ToArray());
-                return tuple;
-            }
-                
-            
-        });
+        var uniqueImages = allImages.DistinctBy(im => MimeUtility.GetMimeMapping(im.Extension))
+            .Select(im => im.FullName);
+        
 
         foreach (var item in uniqueImages)
-            yield return new object[] { item.bytes, item.fileInfo };
+            yield return new object[] { item };
 
 
 

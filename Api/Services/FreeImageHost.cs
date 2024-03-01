@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shared;
+using Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,10 @@ public interface IImageHost
     ///     Uma resposta <see cref="RemoteImageAction"/> que contém statuscode. 
     ///     Caso o status code seja 201, a imagem foi enviada com sucesso, 
     ///     caso contrário o campo <see cref="RemoteImageAction.Message"/> terá uma mensagem.
+    ///     Caso aconteça algum erro no parse do json, uma exceção é lançada
     /// </returns>
+    /// <exception cref="JsonException"> Erro no parse para Json </exception>
+    /// <exception cref="FormatException"> Valores do Json estão inválidos </exception>
     public Task<RemoteImageAction> Send(byte[] imageBytes, string filename = null);
 
     public Task<RemoteImageAction[]> SendAll((byte[] bytes, string filename)[] allImages);
@@ -49,7 +53,7 @@ public class FreeImageHost : IImageHost
     /// <exception cref="UriFormatException">Se <paramref name="apiKey"/> for irregular</exception>
     public FreeImageHost(string apiKey, ILogger<FreeImageHost> logger)
     {
-        var api = Values.Api.RequestFreeImageHostUrl.AbsolutePath + $"?key={apiKey}";
+        var api = Values.Api.RequestFreeImageHostRoute.Placeholder(apiKey);
         _apiUri = new Uri(api);
         _logger = logger;
     }
@@ -86,21 +90,23 @@ public class FreeImageHost : IImageHost
         var client = new HttpClient();
 
 
-        using var request = new HttpRequestMessage(HttpMethod.Post, Values.Api.RequestFreeImageHostUrl);
+        using var request = new HttpRequestMessage(HttpMethod.Post, _apiUri);
         using (var content = new MultipartFormDataContent())
         using (var stream = new MemoryStream(imageBytes))
         {
-            content.Add(new StreamContent(stream), "files", filename);
+            content.Add(new StreamContent(stream), "source", filename);
 
             request.Content = content;
             var result = await client.SendAsync(request);
             if (!result.IsSuccessStatusCode)
             {
+                var details = await result.Content.ReadAsStringAsync();
                 _logger.LogError("Resposta da API retornou erro " + result.StatusCode);
+                _logger.LogError(details);
                 return new RemoteImageAction
                 {
                     StatusCode = result.StatusCode,
-                    Message = "Um erro foi retornado"
+                    Message = details
                 };
             }
             
@@ -119,14 +125,15 @@ public class FreeImageHost : IImageHost
             //Exceptions...
             catch (ArgumentNullException ex)
             {
-                _logger.LogError(ex, "Resposta da API em formato desconhecido");
-                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError, Message = "Serviço indisponível"};
+                
+                _logger.LogError(ex, "Resposta da API em formato desconhecido. Erro no parse para json.");
+                throw new JsonException(ex.Message, ex);
 
             }
             catch (UriFormatException ex)
             {
                 _logger.LogError(ex, "Resposta da API em formato desconhecido");
-                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError, Message = "Serviço indisponível" };
+                throw new FormatException(ex.Message, ex);
             }
 
         }
