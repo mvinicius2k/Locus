@@ -20,7 +20,18 @@ namespace Api.Services;
 
 public interface IImageHost
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="imageBytes"></param>
+    /// <param name="filename"></param>
+    /// <returns>
+    ///     Uma resposta <see cref="RemoteImageAction"/> que contém statuscode. 
+    ///     Caso o status code seja 201, a imagem foi enviada com sucesso, 
+    ///     caso contrário o campo <see cref="RemoteImageAction.Message"/> terá uma mensagem.
+    /// </returns>
     public Task<RemoteImageAction> Send(byte[] imageBytes, string filename = null);
+
     public Task<RemoteImageAction[]> SendAll((byte[] bytes, string filename)[] allImages);
 
 }
@@ -88,7 +99,8 @@ public class FreeImageHost : IImageHost
                 _logger.LogError("Resposta da API retornou erro " + result.StatusCode);
                 return new RemoteImageAction
                 {
-                    StatusCode = result.StatusCode
+                    StatusCode = result.StatusCode,
+                    Message = "Um erro foi retornado"
                 };
             }
             
@@ -108,13 +120,13 @@ public class FreeImageHost : IImageHost
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, "Resposta da API em formato desconhecido");
-                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError};
+                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError, Message = "Serviço indisponível"};
 
             }
             catch (UriFormatException ex)
             {
                 _logger.LogError(ex, "Resposta da API em formato desconhecido");
-                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError };
+                return new RemoteImageAction { StatusCode = HttpStatusCode.InternalServerError, Message = "Serviço indisponível" };
             }
 
         }
@@ -139,5 +151,6 @@ public record RemoteImageResponseDTO
 public record RemoteImageAction
 {
     public HttpStatusCode StatusCode { get; init; }
+    public string Message { get; init; }
     public RemoteImageResponseDTO? Result { get; init; }
 }

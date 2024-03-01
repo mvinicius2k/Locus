@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MimeMapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 namespace Shared
 {
 
-    public static partial class Values
+    public static class Values
     {
-        public static partial class Entity
+        public static class Entity
         {
             public const int GroupNameMaxLength = 64;
             public const int GroupDescriptionMaxLength = 1024;
@@ -27,9 +28,17 @@ namespace Shared
 
         }
 
-        public static partial class Api
+        public static class Api
         {
             public static readonly Uri RequestFreeImageHostUrl = new Uri("https://freeimage.host/api/1/upload");
+        }
+
+        public static class File
+        {
+            public static readonly string[] SupportedImagesMime = new string[]
+            {
+                KnownMimeTypes.Jpg, KnownMimeTypes.Png, KnownMimeTypes.Bmp, KnownMimeTypes.Avif, KnownMimeTypes.Tif, KnownMimeTypes.Gif, KnownMimeTypes.Webp
+            };
         }
     }
 }
