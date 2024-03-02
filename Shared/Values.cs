@@ -35,6 +35,7 @@ namespace Shared
 
         public static class File
         {
+            [Obsolete]
             public static readonly string[] SupportedImagesMime = new string[]
             {
                 KnownMimeTypes.Jpg, KnownMimeTypes.Png, KnownMimeTypes.Bmp, KnownMimeTypes.Avif, KnownMimeTypes.Tif, KnownMimeTypes.Gif, KnownMimeTypes.Webp

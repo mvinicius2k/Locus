@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
+using MimeMapping;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Shared;
@@ -38,12 +39,19 @@ public interface IImageHost
 
     public Task<RemoteImageAction[]> SendAll((byte[] bytes, string filename)[] allImages);
 
+
+    public string[] SupportedMimes { get; }
 }
 
 public class FreeImageHost : IImageHost
 {
     private readonly Uri _apiUri;
     private readonly ILogger<FreeImageHost> _logger;
+    public static readonly string[] HostSupportedMimes = new string[]
+    {
+        KnownMimeTypes.Jpg, KnownMimeTypes.Png, KnownMimeTypes.Gif, KnownMimeTypes.Webp
+    };
+    public string[] SupportedMimes => HostSupportedMimes;
 
     /// <summary>
     /// 
@@ -54,6 +62,7 @@ public class FreeImageHost : IImageHost
     public FreeImageHost(string apiKey, ILogger<FreeImageHost> logger)
     {
         var api = Values.Api.RequestFreeImageHostRoute.Placeholder(apiKey);
+        
         _apiUri = new Uri(api);
         _logger = logger;
     }
@@ -72,15 +81,15 @@ public class FreeImageHost : IImageHost
     {
 
         var json = JObject.Parse(imageJson);
-        var fullImageUrl = json.SelectToken("image/url").Value<string>();
-        string mediumImageUrl = json.SelectToken("image.medium.url").Value<string>();
-        string thumbImageUrl = json.SelectToken("image.thumb.url").Value<string>();
+        var fullImageUrl = json.SelectToken("image.url");
+        var mediumImageUrl = json.SelectToken("image.medium.url");
+        var thumbImageUrl = json.SelectToken("image.thumb.url");
 
         return new RemoteImageResponseDTO
         {
-            FullImage = new Uri(fullImageUrl),
-            Medium = new Uri(mediumImageUrl),
-            Thumb = new Uri(thumbImageUrl)
+            FullImage = new Uri(fullImageUrl.Value<string>()),
+            Medium = mediumImageUrl != null ? new Uri(mediumImageUrl.Value<string>()) : null,
+            Thumb = thumbImageUrl != null ? new Uri(thumbImageUrl.Value<string>()) : null
         };
 
     }
@@ -113,9 +122,10 @@ public class FreeImageHost : IImageHost
             
             try
             {
+                var dto = ExtractResponseDTO(await result.Content.ReadAsStringAsync());
                 return new RemoteImageAction
                 {
-                    Result = ExtractResponseDTO(await result.Content.ReadAsStringAsync()),
+                    Result = dto,
                     StatusCode = HttpStatusCode.Created
                 };
 
