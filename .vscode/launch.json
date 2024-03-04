@@ -30,10 +30,12 @@
             "name": "Client",
             "type": "dotnet",
             "request": "launch",
+            "preLaunchTask": "watch blazor",
             "projectPath": "${workspaceFolder}\\Client\\Client.csproj",
             "launchConfigurationId": "TargetFramework=;https",
             
         },
+        
         {
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes

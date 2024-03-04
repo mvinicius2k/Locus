@@ -1,0 +1,21 @@
+﻿@page "/blog"
+@using Client.Models
+
+@implements IQueryParams
+
+<Client.Components.QueryComponent Title="Título" QueryParams="this">
+
+</Client.Components.QueryComponent>
+
+
+@code {
+    private int _currentPage;
+
+    public int Page => _currentPage;
+    public string? OrderBy => null;
+    public int PageSize => 10;
+    public (string fieldName, string value)? StringSearch => null;
+
+
+    
+}

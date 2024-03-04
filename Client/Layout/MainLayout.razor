@@ -1,16 +1,37 @@
 ﻿@inherits LayoutComponentBase
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <nav class="pure-g menu">
+        <div class="pure-u-3-24 inline-logo">
+           <a href="/">
+            <img src="images/logo.svg"/>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+           </a>
+        </div>
+        <div class="pure-u-1-4">
+            <ul>
+                <li>
+                    <a href=""> Painel </a>
+                </li>
+                <li>
+                    <a href="/blog"> Blog </a>
+                </li>
+                <li
+                    ><a href=""> Sobre </a>
+                </li>
+                <li>
+                    <a href=""> Contato </a>
+                </li>
+            </ul>
         </div>
 
-        <article class="content px-4">
+    </nav>
+
+    <main>
+
+
+        <article class="content">
             @Body
+
         </article>
     </main>
 </div>

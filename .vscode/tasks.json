@@ -131,6 +131,18 @@
                 "${workspaceFolder}/MyGames.sln"
             ],
             "problemMatcher": "$msCompile"
+        },
+		{
+            "label": "watch blazor",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/Client/Client.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
 	]
 }

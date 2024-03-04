@@ -1,0 +1,35 @@
+﻿@using Client.Models
+
+<h3>@Title</h3>
+
+<div>
+    <h5>@QueryParams.PageSize</h5>
+</div>
+
+@code {
+    private IQueryParams _queryParams;
+
+    [Parameter]
+    public string Title { get; set; }
+    [Parameter, EditorRequired]
+    public IQueryParams QueryParams 
+    { 
+        get => _queryParams;
+        set {
+            _queryParams = value;
+            GetQueryResults();
+        }
+    }
+
+
+    private void GetQueryResults()
+    {
+        Console.WriteLine("Resultados obtidos");
+    }
+
+    
+
+
+    
+}
+
