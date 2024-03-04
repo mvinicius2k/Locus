@@ -40,6 +40,8 @@ namespace Api.Database
         protected override void OnModelCreating(ModelBuilder mb)
         {
             base.OnModelCreating(mb);
+            
+            
             //Constraints
             mb.Entity<Group>().Property(g => g.Name)
                 .HasMaxLength(Values.Entity.GroupNameMaxLength);
@@ -49,6 +51,8 @@ namespace Api.Database
 
             mb.Entity<Post>().Property(p => p.Content)
                 .HasColumnType("TEXT");
+            mb.Entity<Post>().Property(p => p.Summary)
+                .HasMaxLength(Values.Entity.PostSummaryMaxLength);
             mb.Entity<Post>().Property(p => p.Title)
                 .HasMaxLength(Values.Entity.PostTitleMaxLength);
 

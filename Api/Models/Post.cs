@@ -2,6 +2,7 @@
 
 namespace Api.Models
 {
+    
     public class Post : IModel<int>
     {
         public int Id { get; set; }
@@ -9,6 +10,7 @@ namespace Api.Models
         public string Title { get; set; }
 
         public string Content { get; set; }
+        public string Summary { get; set; }
 
         public int FeaturedImageId { get; set; }
 

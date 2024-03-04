@@ -15,7 +15,8 @@ namespace Shared
             public const int GroupNameMaxLength = 64;
             public const int GroupDescriptionMaxLength = 1024;
 
-            public const int PostContentMaxLength = 2 ^ 16 - 1;
+            public const int PostContentMaxLength = 30000;
+            public const int PostSummaryMaxLength = 500;
             public const int PostTitleMaxLength = 70;
 
             public const int TagNameMaxLength = 32;
