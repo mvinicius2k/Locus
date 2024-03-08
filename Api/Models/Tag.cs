@@ -2,7 +2,7 @@
 
 namespace Api.Models
 {
-    public class Tag : IModel<string>
+    public class Tag : IEntity<string>
     {
         
         public string Name { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Api.Models
 {
-    public class Image : IModel<int>
+    public class Image : IEntity<int>
     {
         public int Id { get; set; }
         public string Path { get; set; }

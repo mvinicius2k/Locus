@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,5 +26,20 @@ namespace Shared.Helpers
             });
             return string.Format(formated, args);
         }
+
+        public static string ToQuery(this NameValueCollection nameValue){
+
+            var sb = new StringBuilder();
+
+            foreach (var key in nameValue.AllKeys)
+            {
+                sb.Append($"{key}={nameValue[key]}&");
+            }
+
+            return sb.ToString()[..(sb.Length - 1)];
+        }
+
+        public static string ToQueryWithPrefix(this NameValueCollection nameValue)
+            => "?" + nameValue.ToQuery();
     }
 }

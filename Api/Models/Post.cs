@@ -3,7 +3,7 @@
 namespace Api.Models
 {
     
-    public class Post : IModel<int>
+    public class Post : IEntity<int>
     {
         public int Id { get; set; }
 

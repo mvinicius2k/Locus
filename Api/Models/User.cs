@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Api.Models
 {
-    public class User : IdentityUser, IModel<string>
+    public class User : IdentityUser, IEntity<string>
     {
         public string PresentationName { get; set; }
         public ICollection<Image> Resources { get; set; }

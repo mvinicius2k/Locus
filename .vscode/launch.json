@@ -8,10 +8,12 @@
             "platform": "netCore",
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
-            }
-        },
+            },
+            //"preLaunchTask": "func shell (functions)"
 
-        
+            
+            
+        },
         {
             "name": "Attach Functions Startup",
             "type": "coreclr",
@@ -34,23 +36,6 @@
             "projectPath": "${workspaceFolder}\\Client\\Client.csproj",
             "launchConfigurationId": "TargetFramework=;https",
             
-        },
-        
-        {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Api/bin/Debug/net8.0/Api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Api",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
-            "stopAtEntry": false
         },
         {
             "name": ".NET Core Attach",

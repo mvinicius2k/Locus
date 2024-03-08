@@ -1,6 +1,6 @@
 ﻿namespace Api.Models;
 
-public class Group : IModel<int>
+public class Group : IEntity<int>
 {
     public int Id { get; set; }
 

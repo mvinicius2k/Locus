@@ -1,5 +1,5 @@
 ﻿using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Api.Database;
@@ -9,34 +9,43 @@ using Api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using Api;
+using Microsoft.Extensions.DependencyInjection;
 
 const bool Restart = true;
 
-//#if DEBUG
-//while(!Debugger.IsAttached)
-//    Thread.Sleep(100);
-//#endif
-
 var builder = new HostBuilder()
+    
     .ConfigureFunctionsWebApplication(w =>
     {
         w.UseNewtonsoftJson();
-
+        
     })
     .ConfigureServices((hostContext, services) =>
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
 
+
         //Serviços de database
         services.AddDbContext<Context>(opt =>
         {
+            var children = Environment.GetEnvironmentVariables();
             var connectionString = hostContext.Configuration.GetSection(ApiValues.ConnectionKey).Value ?? throw new Exception("String de conexão inválida");
-            var version = new MariaDbServerVersion(new Version("10.6"));
-            opt.UseMySql(connectionString, version);
+            opt.UseSqlServer(connectionString);
         });
         services.AddScoped<DbInit>();
 
+        //Meus serviços
+        services.AddSingleton<IDescribes, Describes>();
+
+        //Repositories
+        services.AddScoped<ITagRepository, TagRepository>();
+
+        //AutoMapper
+        services.AddAutoMapper(assemblies: typeof(AutoMapperProfile).Assembly);
+        
+        
         //Serviços do identity
         services.AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<Context>();
@@ -64,4 +73,4 @@ var host = builder.Build();
 host.AwakeDB(Restart);
 
 
-host.Run();
+await host.RunAsync();

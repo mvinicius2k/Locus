@@ -25,9 +25,18 @@ namespace Api.Database
             _logger.LogWarning("Não é possível criar nem deletar o banco de dados fora do perfil de depuração.");
             return;
 #endif
-            if(restart)
-                await _context.Database.EnsureDeletedAsync();
-            await _context.Database.EnsureCreatedAsync();
+            try
+            {
+                if(restart)
+                    await _context.Database.EnsureDeletedAsync();
+                await _context.Database.EnsureCreatedAsync();
+                
+            }
+            catch (System.Exception e)
+            {
+                
+                throw;
+            }
         }
 
         public async Task TrySeed()

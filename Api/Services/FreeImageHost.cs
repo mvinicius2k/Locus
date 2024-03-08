@@ -61,7 +61,7 @@ public class FreeImageHost : IImageHost
     /// <exception cref="UriFormatException">Se <paramref name="apiKey"/> for irregular</exception>
     public FreeImageHost(string apiKey, ILogger<FreeImageHost> logger)
     {
-        var api = Values.Api.RequestFreeImageHostRoute.Placeholder(apiKey);
+        var api = Values.Api.FreeImageHostUrl.Placeholder(apiKey);
         
         _apiUri = new Uri(api);
         _logger = logger;

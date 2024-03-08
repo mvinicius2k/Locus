@@ -85,7 +85,10 @@
 			"command": "func",
 			"args": [
 				"host",
-				"start"
+				"start",
+				"--no-build",
+				"--dotnet-isolated-debug",
+				"--enable-json-output"
 			],
 			"group": {
 				"kind": "build",

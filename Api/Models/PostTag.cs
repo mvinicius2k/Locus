@@ -1,6 +1,6 @@
 ﻿namespace Api.Models
 {
-    public class PostTag : IModel<(string tagName, int postId)>
+    public class PostTag : IEntity<(string tagName, int postId)>
     {
         public string TagName { get; set; }
 

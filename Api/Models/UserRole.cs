@@ -8,7 +8,7 @@ using Shared.Models;
 
 namespace Api.Models;
 
-public class UserRole : IdentityUserRole<string>, IModel<(string userId, string roleId, int groupId)>
+public class UserRole : IdentityUserRole<string>, IEntity<(string userId, string roleId, int groupId)>
 {
     public int GroupId { get; set; }
 

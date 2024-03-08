@@ -25,13 +25,16 @@ namespace Shared
 
             public const int ResourcePathMaxLength = 256;
             
-
+            
 
         }
 
         public static class Api
         {
-            public const string RequestFreeImageHostRoute = $"https://freeimage.host/api/1/upload?key={{key}}";
+            public const string FreeImageHostUrl = $"https://freeimage.host/api/1/upload?key={{key}}";
+            public const string TagGet = $"Tags-Get";
+            public const string TagGetQuery = "query";
+            //public const string TagFunctionsGetQuery = $"?query={{query}}";
         }
 
         public static class File

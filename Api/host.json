@@ -1,6 +1,10 @@
 {
     "version": "2.0",
     "logging": {
+        "logLevel": {
+            "default": "Trace",
+            "Function": "Trace"
+        },
         "applicationInsights": {
             "samplingSettings": {
                 "isEnabled": true,
@@ -8,5 +12,8 @@
             },
             "enableLiveMetricsFilters": true
         }
-    }
+    },
+    //"functionTimeout":"01:00:00"
+    
+
 }
