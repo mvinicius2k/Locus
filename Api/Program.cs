@@ -11,7 +11,10 @@ using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using Api;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
+using FluentValidation;
+using FluentValidation.Results;
+using Shared.Models;
+using Shared;
 
 
 const bool Restart = true;
@@ -43,6 +46,9 @@ var builder = new HostBuilder()
 
         //Repositories
         services.AddScoped<ITagRepository, TagRepository>();
+
+        //Validators
+        services.AddValidatorsFromAssemblyContaining<TagRequestDTO>();
 
         //AutoMapper
         services.AddAutoMapper(assemblies: typeof(AutoMapperProfile).Assembly);

@@ -4,6 +4,8 @@ using System.Net;
 using Api.Database;
 using Api.Models;
 using AutoMapper;
+using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -23,13 +25,14 @@ public class TagFunctions
     private readonly IMapper _mapper;
     private readonly ITagRepository _repository;
     private readonly IDescribes _describes;
-    
+    private readonly IValidator<TagRequestDTO> _validator;
 
-    public TagFunctions(IMapper mapper, ITagRepository repository, IDescribes describes)
+    public TagFunctions(IMapper mapper, ITagRepository repository, IDescribes describes, IValidator<TagRequestDTO> validator)
     {
         _mapper = mapper;
         _repository = repository;
         _describes = describes;
+        _validator = validator;
     }
 
     [Function(Values.Api.TagGet)]
@@ -50,5 +53,26 @@ public class TagFunctions
 
 
         return new OkObjectResult(final);
+    }
+
+    [Function(Values.Api.TagAdd)]
+    [OpenApiOperation(Values.Api.TagAdd, Description = "Adiciona uma tag.")]
+    [OpenApiResponseWithBody(HttpStatusCode.Created, MimeMapping.KnownMimeTypes.Json, typeof(TagResponseDTO[]))]
+    public async Task<IActionResult> Add([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req){
+
+        var dto = await req.ReadFromJsonAsync<TagRequestDTO>();
+        if(dto == null)
+            return new BadRequestObjectResult(_describes.BadBodyRequest());
+
+        var results = await _validator.ValidateAsync(dto);
+        var modelState = ModelState.FromValidationResult(results);
+        if(!modelState.IsValid)
+            return new UnprocessableEntityObjectResult(modelState.GroupByProperty());
+
+        var entity = _mapper.Map<TagRequestDTO, Tag>(dto);
+        await _repository.Add(entity);
+    
+        var responseDTO = _mapper.Map<Tag, TagResponseDTO>(entity);
+        return new CreatedAtActionResult(Values.Api.TagAdd, null, null, responseDTO);
     }
 }

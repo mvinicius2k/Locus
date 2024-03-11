@@ -91,4 +91,10 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
         
         return final;
     }
+
+    public Task Add(TEntity entity)
+    {
+        _context.Set<TEntity>().Add(entity);
+        return _context.SaveChangesAsync();
+    }
 }

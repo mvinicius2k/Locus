@@ -25,6 +25,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="8.3.10"/>
     <PackageReference Include="AutoMapper" Version="13.0.1"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2"/>
+    <PackageReference Include="FluentValidation" Version="11.9.0"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj"/>
