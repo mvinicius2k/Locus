@@ -32,10 +32,6 @@ namespace Api.Database
 
         }
 
-        public Context()
-        {
-
-        }
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
@@ -84,14 +80,14 @@ namespace Api.Database
                 .OnDelete(DeleteBehavior.Cascade);
 
             mb.Entity<User>()
-                .HasMany(u => u.Resources)
+                .HasMany(u => u.Images)
                 .WithOne(r => r.Owner)
                 .OnDelete(DeleteBehavior.Cascade);
 
             mb.Entity<Post>()
                 .HasOne(p => p.FeaturedImage)
                 .WithMany(r => r.UsedByPosts)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
                 
             mb.Entity<Post>()
                 .HasMany(p => p.PostTags)
@@ -104,7 +100,8 @@ namespace Api.Database
                 .OnDelete(DeleteBehavior.Cascade); ;
             mb.Entity<Group>()
                 .HasOne(g => g.Image)
-                .WithMany(im => im.UserByGroups);
+                .WithMany(im => im.UserByGroups)
+                .OnDelete(DeleteBehavior.Restrict);
                 
                 
 

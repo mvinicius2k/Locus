@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using Api;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
+
 
 const bool Restart = true;
 
@@ -19,13 +21,13 @@ var builder = new HostBuilder()
     .ConfigureFunctionsWebApplication(w =>
     {
         w.UseNewtonsoftJson();
-        
+
     })
     .ConfigureServices((hostContext, services) =>
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-
+        
 
         //Serviços de database
         services.AddDbContext<Context>(opt =>

@@ -11,7 +11,7 @@ namespace Api.Models
     public class User : IdentityUser, IEntity<string>
     {
         public string PresentationName { get; set; }
-        public ICollection<Image> Resources { get; set; }
+        public ICollection<Image> Images { get; set; }
         public ICollection<Post> Posts { get; set; }
 
         public string GetId()

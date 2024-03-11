@@ -8,10 +8,10 @@ public class Group : IEntity<int>
 
     public string Description { get; set; }
 
-    public int ImageId { get; set; }
+    public int? ImageId { get; set; }
 
     public virtual ICollection<UserRole> UserRoles { get; set; }
-    public virtual Image Image { get; set; }
+    public virtual Image? Image { get; set; }
 
 
     public int GetId()
