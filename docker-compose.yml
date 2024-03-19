@@ -4,12 +4,13 @@ version: '3.4'
 
 services:
   api:
-    image: api:dev
+    image: api
     build:
       context: .
       dockerfile: Api/Dockerfile
       args:
-        - configuration=Debug
+        - configuration=Release
+        - BUILD_CONFIGURATION=Release
     ports:
       - 5000:5000
     networks:

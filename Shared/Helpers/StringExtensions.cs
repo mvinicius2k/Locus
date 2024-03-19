@@ -11,6 +11,17 @@ namespace Shared.Helpers
     public static class StringExtensions
     {
         /// <summary>
+        /// Converte para uma string de tamanho 22 base64 segura para urls, sem {/, +, =}
+        /// </summary>
+        public static string ToSafeBase64(this Guid guid, char plusReplacer = '_', char barReplacer = ',')
+        {
+            return Convert.ToBase64String(guid.ToByteArray()).Substring(0, 22)
+                .Replace('+', plusReplacer)
+                .Replace('/', barReplacer)
+                .Replace("=", "");
+        }
+
+        /// <summary>
         /// Substitui substrings numa string sequencialmente com base em tudo que fica entre chaves
         /// </summary>
         /// <param name="str"></param>
@@ -39,6 +50,11 @@ namespace Shared.Helpers
             return sb.ToString()[..(sb.Length - 1)];
         }
 
+        /// <summary>
+        /// Cria uma query de url com os itens dividos por &amp;
+        /// </summary>
+        /// <param name="nameValue"></param>
+        /// <returns></returns>
         public static string ToQueryWithPrefix(this NameValueCollection nameValue)
             => "?" + nameValue.ToQuery();
     }

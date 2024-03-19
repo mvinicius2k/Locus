@@ -146,6 +146,15 @@
                 "${workspaceFolder}/Client/Client.csproj"
             ],
             "problemMatcher": "$msCompile"
-        }
+        },
+
+		//Docker
+
+		{
+			"label": "Compose Up waiting debugger",
+			"type": "shell",
+			"command": "docker-compose -f docker-compose.debug.yml -f docker-compose.debug.await.yml up -d --build",
+			
+		}
 	]
 }

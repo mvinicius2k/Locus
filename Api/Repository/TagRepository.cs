@@ -1,5 +1,6 @@
 ﻿using Api.Database;
 using Api.Models;
+using Shared;
 
 namespace Api;
 

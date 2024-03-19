@@ -33,6 +33,7 @@ namespace Shared
         {
             public const string FreeImageHostUrl = $"https://freeimage.host/api/1/upload?key={{key}}";
             public const string TagGet = $"Tags-Get";
+            public const string TagGetById = $"Tags-GetById";
             public const string TagAdd = $"Tags-Add";
             public const string TagGetQuery = "query";
             //public const string TagFunctionsGetQuery = $"?query={{query}}";

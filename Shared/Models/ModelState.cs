@@ -6,7 +6,7 @@ namespace Shared;
 public class ModelState
 {
     public readonly HashSet<IValidationDescription> Errors = [];
-    public bool IsValid => Errors.Count != 0;
+    public bool IsValid => Errors.Count == 0;
 
     public IEnumerable<object> GroupByProperty()
     {

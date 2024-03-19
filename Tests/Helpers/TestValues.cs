@@ -2,5 +2,5 @@
 
 public static class TestValues
 {
-    public const string ApiAdress = "https://localhost:5001/api/";
+    public const string ApiAdress = "http://localhost:7071/api/";
 }

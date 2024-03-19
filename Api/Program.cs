@@ -15,6 +15,9 @@ using FluentValidation;
 using FluentValidation.Results;
 using Shared.Models;
 using Shared;
+using System.Composition.Hosting.Core;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Reflection;
 
 
 const bool Restart = true;
@@ -24,7 +27,7 @@ var builder = new HostBuilder()
     .ConfigureFunctionsWebApplication(w =>
     {
         w.UseNewtonsoftJson();
-
+      
     })
     .ConfigureServices((hostContext, services) =>
     {
@@ -48,7 +51,7 @@ var builder = new HostBuilder()
         services.AddScoped<ITagRepository, TagRepository>();
 
         //Validators
-        services.AddValidatorsFromAssemblyContaining<TagRequestDTO>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         //AutoMapper
         services.AddAutoMapper(assemblies: typeof(AutoMapperProfile).Assembly);
