@@ -10,6 +10,12 @@ namespace Shared
 
     public static class Values
     {
+        public static class Events
+        {
+            public static int QueryDecode = 1;
+            public static int QueryConvert = 2;
+        }
+
         public static class Entity
         {
             public const int GroupNameMaxLength = 64;
@@ -35,6 +41,8 @@ namespace Shared
             public const string TagGet = $"Tags-Get";
             public const string TagGetById = $"Tags-GetById";
             public const string TagAdd = $"Tags-Add";
+            public const string TagRename = $"Tags-Rename";
+            public const string TagDelete = $"Tags-Delete";
             public const string TagGetQuery = "query";
             //public const string TagFunctionsGetQuery = $"?query={{query}}";
         }

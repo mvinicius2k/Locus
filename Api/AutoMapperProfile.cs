@@ -8,6 +8,6 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile(){
         CreateMap<Tag, TagResponseDTO>();
-        CreateMap<TagRequestDTO, Tag>();
+        CreateMap<TagRequestDTO, Tag>().ForMember(t => t.Name, opt => opt.MapFrom( src => src.Name.ToLower()));
     }
 }

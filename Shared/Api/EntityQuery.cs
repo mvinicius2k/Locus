@@ -2,7 +2,7 @@
 
 namespace Shared.Api;
 
-public struct EntityQuery : IEntityQuery
+public record EntityQuery : IEntityQuery
 {
     public int Page;
     public int PageSize;

@@ -18,13 +18,14 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
         _describes = describes;
     }
 
-    public Task Delete(TId id)
+    public async Task<bool> TryDelete(TId id)
     {
         var entity = _context.Set<TEntity>().Find(IdAsArray(id));
-            if (entity == null)
-                throw new KeyNotFoundException(_describes.KeyNotFound(id));
-            _context.Set<TEntity>().Remove(entity);
-            return _context.SaveChangesAsync();
+        if (entity == null)
+            return false;
+        _context.Set<TEntity>().Remove(entity);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
     public ValueTask<TEntity?> GetById(TId id)
@@ -40,15 +41,17 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
     }
 
 
-    public Task Update(TId id, TEntity newEntity)
+    public async Task<bool> TryUpdate(TId id, TEntity newEntity)
     {
         var entity = _context.Set<TEntity>().Find(IdAsArray(id)) ?? throw new KeyNotFoundException(_describes.KeyNotFound(id));
-        
+        if (entity == null)
+            return false;
         _context.Set<TEntity>().Entry(entity).State = EntityState.Detached;
         newEntity.SetId(id);
 
         _context.Set<TEntity>().Update(newEntity);
-        return _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
+        return true;
     }
 
     /// <summary>
@@ -82,15 +85,15 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
             results = results.OrderBy(entityQuery.OrderBy);
         results = results.Skip(entityQuery.PageSize * Math.Clamp(entityQuery.Page - 1, 0, int.MaxValue))
             .Take(entityQuery.PageSize);
-        
-        if(entityQuery.Expand != null)
+
+        if (entityQuery.Expand != null)
             for (int i = 0; i < entityQuery.Expand.Length; i++)
                 results = results.Include(entityQuery.Expand[i]);
 
         var final = entityQuery.Select != null
             ? results.Select(entityQuery.Select)
             : results;
-        
+
         return final.AsQueryable();
     }
 
@@ -99,4 +102,6 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
         _context.Set<TEntity>().Add(entity);
         return _context.SaveChangesAsync();
     }
+
+
 }
