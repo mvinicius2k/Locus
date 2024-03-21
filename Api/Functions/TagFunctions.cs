@@ -24,7 +24,7 @@ namespace Api;
 
 public class TagFunctions : CrudBase<Tag, string, TagRequestDTO, TagResponseDTO>
 {
-    protected TagFunctions(ILogger<Tag> logger, IMapper mapper, ITagRepository repository, IDescribes describes, IValidator<TagRequestDTO> validator) : base(logger, mapper, repository, describes, validator)
+    public TagFunctions(ILogger<Tag> logger, IMapper mapper, ITagRepository repository, IDescribes describes, IValidator<TagRequestDTO> validator) : base(logger, mapper, repository, describes, validator)
     {
     }
 
@@ -37,8 +37,8 @@ public class TagFunctions : CrudBase<Tag, string, TagRequestDTO, TagResponseDTO>
     [Function(Values.Api.TagGet)]
     [OpenApiOperation(Values.Api.TagGet, Description = "Obtém uma consulta de tags.")]
     [OpenApiResponseWithBody(HttpStatusCode.OK, MimeMapping.KnownMimeTypes.Json, typeof(TagResponseDTO[]))]
-    public async new ValueTask<IActionResult> Get([HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestData req, string queryKey)
-        => await base.Get(req, queryKey);
+    public async new ValueTask<IActionResult> Get([HttpTrigger(AuthorizationLevel.Anonymous, "get")]HttpRequestData req)
+        => await base.Get(req, Values.Api.TagGetQuery);
 
 
     [Function(Values.Api.TagAdd)]

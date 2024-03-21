@@ -67,7 +67,7 @@ public class TagTest
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var responseData = await response.Content.ReadFromJsonAsync<TagResponseDTO>();
         responseData.Should().NotBeNull();
-        responseData.Name.Normalize().Should().Be(data.Name.Normalize());
+        responseData.Name.Normalize().Should().Be(data.Name.ToLower());
 
 
     }

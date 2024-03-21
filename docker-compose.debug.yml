@@ -24,10 +24,13 @@ services:
       - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
       - FUNCTIONS_ENABLE_DEBUGGER_WAIT=True
 
-    entrypoint: sh -c "/functions_debugging_cli/func host start --dotnet-isolated-debug --enable-json-output" #Inicia o azure functions em modo debug
+    entrypoint: sh -c "/functions_debugging_cli/func host start --no-build --dotnet-isolated-debug --enable-json-output" #Inicia o azure functions em modo debug
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
       - C:\Users\marco\AppData\Local\AzureFunctionsTools\Releases\4.69.0\cli_x64_Linux:/functions_debugging_cli:ro # Mapeia as ferramentas do azure do pc do host para o container. 
+      - C:\Users\marco\.nuget\packages\:/.nuget/packages:ro
+      # - C:\Users\marco\Desktop\Code\Locus\Api:/home/site/wwwroot
+      # - C:\Users\marco\Desktop\Code\Locus:/src
     tty: true # Habilita interação entre o terminal do host e o do container
   sql-server:
     image: mcr.microsoft.com/mssql/server:2019-latest
