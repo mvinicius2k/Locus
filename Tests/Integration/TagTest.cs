@@ -58,16 +58,21 @@ public class TagTest
         responseText.Should().NotContain(x => x.Name == exclude);
     }
 
-    [Theory, MemberData(nameof(ValidTags))]
-    public async Task Post_ValidTags_ShoundReturn201(TagRequestDTO data){
+    [Theory,
+    InlineData("tagVálida"),
+    InlineData("123"),
+    InlineData("sfdgdfh"),
+    InlineData("C#"),
+    InlineData("k")]
+    public async Task Post_ValidTags_ShoundReturn201(string data){
         
 
-        var response = await _client.PostAsJsonAsync(Values.Api.TagAdd, data);
+        var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO { Name = data });
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var responseData = await response.Content.ReadFromJsonAsync<TagResponseDTO>();
         responseData.Should().NotBeNull();
-        responseData.Name.Normalize().Should().Be(data.Name.ToLower());
+        responseData.Name.Normalize().Should().Be(data.ToLower());
 
 
     }
@@ -82,10 +87,28 @@ public class TagTest
     public async Task Post_InvalidTags_ShouldReturnCorrectStatusCode(string? tag, HttpStatusCode statusCode){
      
 
-        var response = await _client.PostAsJsonAsync(Values.Api.TagAdd, new TagRequestDTO{ Name = tag });
+        var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO{ Name = tag });
 
         response.StatusCode.Should().Be(statusCode);
         
+    }
+
+    [Theory,
+    InlineData("tagVálida", "outraVálida"),
+    InlineData("123", "1234"),
+    InlineData("sfdgdfh", "dgfhfj"),
+    InlineData("C#", "C++"),
+    InlineData("k", "k")]
+    public async Task Rename_Tag_ShouldReturn200(string original, string edit)
+    {
+        await QuickPopulate.PostTags(_client, new TagRequestDTO { Name = original });
+
+        var response = await _client.PutAsJsonAsync(Values.Api.TagRename.Placeholder(), new TagRequestDTO { Name = edit });
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var data = await response.Content.ReadFromJsonAsync<TagResponseDTO>();
+        data.Should().NotBeNull();
+        data.Name.Should().Be(edit.ToLower());
+
     }
 
 

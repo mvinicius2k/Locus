@@ -1,0 +1,23 @@
+# Yml destinado a depuração local
+
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "Admin1234"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    networks:
+      - sql-network
+
+
+networks: 
+  sql-network:
+    driver: bridge

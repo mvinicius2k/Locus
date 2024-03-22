@@ -9,7 +9,7 @@ public static class QuickPopulate
     public static async Task PostTags(HttpClient http, TagRequestDTO tag)
     {
 
-        var response = await http.PostAsJsonAsync(Values.Api.TagAdd, tag);
+        var response = await http.PostAsJsonAsync(Values.Api.TagCreate, tag);
         if(!response.IsSuccessStatusCode)
             Assert.Fail(response.StatusCode.ToString());
     }

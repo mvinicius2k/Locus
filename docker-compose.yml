@@ -12,7 +12,7 @@ services:
         - configuration=Release
         - BUILD_CONFIGURATION=Release
     ports:
-      - 5000:5000
+      - 7071:7071
     networks:
       - sql-network
     environment:

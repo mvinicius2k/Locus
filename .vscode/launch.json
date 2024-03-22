@@ -26,7 +26,7 @@
             "name": "Attach Functions",
             "type": "coreclr",
             "request": "attach",
-            "processId": "${command:azureFunctions.pickProcess}",
+            //"processId": "${command:azureFunctions.pickProcess}",
         },
         {
             "name": "Client",
