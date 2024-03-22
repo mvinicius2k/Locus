@@ -2,6 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "docker",
+            "name": "Docker-Compose Debug",
+            "request": "launch",
+            "removeContainerAfterDebug": true,
+            "preLaunchTask": "build (functions)",
+            "platform": "netCore",
+            "containerName": "locus-api-1",
+            
+
+
+        },
+        {
             "name": "Docker .NET Attach (Preview)",
             "type": "docker",
             "request": "attach",
@@ -14,14 +26,7 @@
             
             
         },
-        {
-            "name": "Attach Functions Startup",
-            "type": "coreclr",
-            "request": "attach",
-            "preLaunchTask": "func shell (functions)",
-
-            
-        },
+        
         {
             "name": "Attach Functions",
             "type": "coreclr",

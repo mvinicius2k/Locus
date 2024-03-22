@@ -1,5 +1,3 @@
-# Yml destinado a depuração local
-
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
 version: '3.4'
@@ -22,18 +20,14 @@ services:
       - AZURE_FUNCTIONS_ENVIRONMENT=Development
       - ConnectionString=server=sql-server,1433;User Id=sa;Password=Admin1234;Database=api-db;TrustServerCertificate=true
       - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
-      - FUNCTIONS_ENABLE_DEBUGGER_WAIT=True
-
-    entrypoint: sh -c "/functions_debugging_cli/func host start --no-build --dotnet-isolated-debug --enable-json-output" #Inicia o azure functions em modo debug
+    entrypoint: sh -c "cd /ApiDebug && /functions_debugging_cli/func host start --no-build --enable-json-output" #Inicia o azure functions em modo debug
     volumes:
-      - C:\Users\marco\Desktop\Code\Locus\Api:/home/site/wwwroot
-      - C:\Users\marco\Desktop\Code\Locus:/src
+      - ./Api/bin/Debug/net8.0:/ApiDebug
       - ~/.vsdbg:/remote_debugger:rw
       - C:\Users\marco\AppData\Local\AzureFunctionsTools\Releases\4.69.0\cli_x64_Linux:/functions_debugging_cli:ro # Mapeia as ferramentas do azure do pc do host para o container. 
-      - C:\Users\marco\.nuget\packages\:/.nuget/packages:ro
-      # - C:\Users\marco\Desktop\Code\Locus\Api:/home/site/wwwroot
-      # - C:\Users\marco\Desktop\Code\Locus:/src
     tty: true # Habilita interação entre o terminal do host e o do container
+    labels:
+      killprogram: "/bin/sh -c 'if PID=$$(pidof dotnet); then kill -9 $$PID; fi; if PID1=$$(pidof func); then kill -9 $$PID1; fi'"
   sql-server:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:

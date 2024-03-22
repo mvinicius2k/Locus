@@ -1,0 +1,8 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+version: '3.4'
+
+services:
+  api:
+    entrypoint: sh -c "cd /ApiDebug && /functions_debugging_cli/func host start --no-build --enable-json-output" #Inicia o azure functions em modo debug
+    

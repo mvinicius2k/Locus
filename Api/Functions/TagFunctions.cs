@@ -29,7 +29,7 @@ public class TagFunctions : CrudBase<Tag, string, TagRequestDTO, TagResponseDTO>
     }
 
     [Function(nameof(GetById))]
-    [OpenApiOperation(Values.Api.TagGetById, Description = "Obtem uma única tag correspondente ao nome.")]
+    [OpenApiOperation(Values.Api.TagGetById, Description = "Obtem uma única tag correspondente ao nome")]
     [OpenApiResponseWithBody(HttpStatusCode.OK, MimeMapping.KnownMimeTypes.Json, typeof(TagResponseDTO))]
     public async ValueTask<IActionResult> GetByName([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.TagGetById)]HttpRequestData req, string id)
         => await base.GetById(req, id.ToLower());

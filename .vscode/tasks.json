@@ -2,6 +2,29 @@
 	"version": "2.0.0",
 	"tasks": [
 		
+		//Docker
+
+		{
+            "label": "Build Functions and Compose-Up",
+            "type": "shell",
+            "command": "docker compose -f docker-compose.debug.yml  up -d --build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["build (functions)"]
+        },
+		{
+            "label": "No Attach Build Functions and Compose-Up",
+            "type": "shell",
+            "command": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.noattach.yml up -d --build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["build (functions)"]
+        },
+        
 		{
 			"label": "clean (functions)",
 			"command": "dotnet",
@@ -148,13 +171,5 @@
             "problemMatcher": "$msCompile"
         },
 
-		//Docker
-
-		{
-			"label": "Compose Up waiting debugger",
-			"type": "shell",
-			"command": "docker-compose -f docker-compose.debug.yml -f docker-compose.debug.await.yml up -d --build",
-			
-		}
 	]
 }
