@@ -6,3 +6,4 @@ services:
   api:
     entrypoint: sh -c "cd /ApiDebug && /functions_debugging_cli/func host start --no-build --enable-json-output" #Inicia o azure functions em modo debug
     
+    

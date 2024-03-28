@@ -16,27 +16,41 @@ using Xunit.Abstractions;
 
 namespace Tests.Integration;
 
-public class TagTest
+public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
 {
     private readonly ITestOutputHelper _output;
-    private readonly HttpClient _client;
-    public TagTest(ITestOutputHelper output)
+    private readonly TestcontainerFixture _testcontainer;
+    private HttpClient _client;
+    public TagTest(ITestOutputHelper output, TestcontainerFixture testcontainer)
     {
         _output = output;
-        _client = new HttpClient{
-            BaseAddress = new Uri(TestValues.ApiAdress),
-        };
+
+        _testcontainer = testcontainer;
+
+    }
+
+    public async Task InitializeAsync()
+    {
+        _client = await _testcontainer.GetClientWhenDone();
+    }
+
+    public Task DisposeAsync()
+    {
+        
+        return Task.CompletedTask;
     }
 
     [Fact]
-    public async Task Get_QueryTags_ShouldSucess(){
+    public async Task Get_QueryTags_ShouldSucess()
+    {
 
         var tags = new TagFaker().Generate(10);
         foreach (var tag in tags)
             await QuickPopulate.PostTags(_client, tag);
-        
+
         var exclude = tags.Last().Name;
-        var query = new EntityQuery{
+        var query = new EntityQuery
+        {
             Page = 1,
             PageSize = 10,
             OrderBy = nameof(Tag.Name),
@@ -50,7 +64,7 @@ public class TagTest
             {Values.Api.TagGetQuery, HttpUtility.UrlEncode(serializedQuery) }
         };
 
-        
+
         var requestUri = Values.Api.TagGet + "?" + routeQuery.ToQuery();
         var response = await _client.GetAsync(requestUri);
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -64,8 +78,9 @@ public class TagTest
     InlineData("sfdgdfh"),
     InlineData("C#"),
     InlineData("k")]
-    public async Task Post_ValidTags_ShoundReturn201(string data){
-        
+    public async Task Post_ValidTags_ShoundReturn201(string data)
+    {
+
 
         var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO { Name = data });
 
@@ -84,13 +99,14 @@ public class TagTest
     InlineData("☺", HttpStatusCode.UnprocessableEntity),
     InlineData("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", HttpStatusCode.UnprocessableEntity),
     ]
-    public async Task Post_InvalidTags_ShouldReturnCorrectStatusCode(string? tag, HttpStatusCode statusCode){
-     
+    public async Task Post_InvalidTags_ShouldReturnCorrectStatusCode(string? tag, HttpStatusCode statusCode)
+    {
 
-        var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO{ Name = tag });
+
+        var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO { Name = tag });
 
         response.StatusCode.Should().Be(statusCode);
-        
+
     }
 
     [Theory,
@@ -113,14 +129,17 @@ public class TagTest
 
 
     #region MemberData
-    public static TheoryData<TagRequestDTO> ValidTags(){
+    public static TheoryData<TagRequestDTO> ValidTags()
+    {
         var count = 5;
         var faker = new TagFaker();
 
         var tags = faker.Generate(count);
         return new TheoryData<TagRequestDTO>(tags);
     }
-    #endregion    
 
-    
+
+    #endregion
+
+
 }

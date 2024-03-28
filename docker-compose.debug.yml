@@ -20,9 +20,9 @@ services:
       - AZURE_FUNCTIONS_ENVIRONMENT=Development
       - ConnectionString=server=sql-server,1433;User Id=sa;Password=Admin1234;Database=api-db;TrustServerCertificate=true
       - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
-    entrypoint: sh -c "cd /ApiDebug && /functions_debugging_cli/func host start --no-build --enable-json-output" #Inicia o azure functions em modo debug
+    entrypoint: sh -c "cd /ApiDebug && pwd && ls && /functions_debugging_cli/func host start --dotnet-isolated-debug --no-build --enable-json-output" #Inicia o azure functions em modo debug
     volumes:
-      - ./Api/bin/Debug/net8.0:/ApiDebug
+      - C:\Users\marco\Desktop\Code\Locus\Api\bin\Debug\net8.0:/ApiDebug
       - ~/.vsdbg:/remote_debugger:rw
       - C:\Users\marco\AppData\Local\AzureFunctionsTools\Releases\4.69.0\cli_x64_Linux:/functions_debugging_cli:ro # Mapeia as ferramentas do azure do pc do host para o container. 
     tty: true # Habilita interação entre o terminal do host e o do container
