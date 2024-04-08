@@ -2,17 +2,17 @@
 
 namespace Api.Models
 {
-    public class Tag : IEntity<string>
+    public class Tag : IEntity<int>
     {
-        
+        public int Id {get; set;}
         public string Name { get; set; }
 
         public virtual ICollection<PostTag> PostTags { get; set; }
 
-        public string GetId()
-            => Name;
+        public int GetId()
+            => Id;
 
-        public void SetId(string value)
-            => Name = value;
+        public void SetId(int value)
+            => Id = value;
     }
 }

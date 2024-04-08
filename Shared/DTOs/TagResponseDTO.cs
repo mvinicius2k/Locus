@@ -10,6 +10,7 @@ namespace Shared.Models
     {
         public const int NameMaxLength = 32;
 
+        public int Id {get; init;}
         public string Name { get; init; }
 
         public ICollection<PostResponseDTO> Posts { get; init; }

@@ -55,6 +55,11 @@ public class Describes : IDescribes
     public virtual string BadBodyRequest()
         => $"Body da requisição está em formato irreconhecível";
 
+    public string InvalidText(string validRules)
+        => $"O campo precisa respeitar as regras: {validRules}";
+
+    public string UnknownJsonFormat()
+        => "Não foi possível serializar, formato irrenhecível";
 }
 
 public interface IDescribes
@@ -78,4 +83,7 @@ public interface IDescribes
     public string BadObject(string name);
     public  string EmptyBodyRequest();
     public  string BadBodyRequest();
+    public string InvalidText(string validRules);
+    public string UnknownJsonFormat();
+        
 }

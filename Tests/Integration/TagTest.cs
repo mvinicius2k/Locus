@@ -83,7 +83,7 @@ public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
 
 
         var response = await _client.PostAsJsonAsync(Values.Api.TagCreate, new TagRequestDTO { Name = data });
-
+        var dat = await response.Content.ReadAsStringAsync();
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var responseData = await response.Content.ReadFromJsonAsync<TagResponseDTO>();
         responseData.Should().NotBeNull();
@@ -119,7 +119,7 @@ public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
     {
         await QuickPopulate.PostTags(_client, new TagRequestDTO { Name = original });
 
-        var response = await _client.PutAsJsonAsync(Values.Api.TagRename.Placeholder(), new TagRequestDTO { Name = edit });
+        var response = await _client.PutAsJsonAsync(Values.Api.TagRename.Placeholder(HttpUtility.UrlEncode(original)), new TagRequestDTO { Name = edit });
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var data = await response.Content.ReadFromJsonAsync<TagResponseDTO>();
         data.Should().NotBeNull();

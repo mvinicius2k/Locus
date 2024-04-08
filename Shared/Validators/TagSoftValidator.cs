@@ -10,6 +10,7 @@ public class TagSoftValidator : AbstractValidator<TagRequestDTO>
             .NotEmpty()
             .MaximumLength(Values.Entity.TagNameMaxLength)
             .WithMessage(describes.NotEmptyOrMaxLength(Values.Entity.TagNameMaxLength))
-            .Matches(@"^[a-zA-Z0-9+#-]+$");
+            .Matches(@"^[a-zA-Z0-9\p{L}][a-zA-Z0-9\p{L}+#-]*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            .WithMessage(describes.InvalidText("Somente letras, números e caracteres #,+,- não no início"));
     }
 }

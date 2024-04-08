@@ -1,8 +1,8 @@
 ﻿namespace Api.Models
 {
-    public class PostTag : IEntity<(string tagName, int postId)>
+    public class PostTag : IEntity<(int tagName, int postId)>
     {
-        public string TagName { get; set; }
+        public int TagId { get; set; }
 
         public int PostId { get; set; }
 
@@ -14,13 +14,13 @@
 
        
 
-        public (string tagName, int postId) GetId()
-            => (TagName, PostId);
+        public (int tagName, int postId) GetId()
+            => (TagId, PostId);
 
-        public void SetId((string tagName, int postId) value)
+        public void SetId((int tagName, int postId) value)
         {
             PostId = value.postId;
-            TagName = value.tagName;
+            TagId = value.tagName;
         }
             
     }

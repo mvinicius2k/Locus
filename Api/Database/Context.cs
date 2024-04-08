@@ -54,16 +54,16 @@ namespace Api.Database
 
             mb.Entity<Tag>().Property(t => t.Name)
                 .HasMaxLength(Values.Entity.TagNameMaxLength);
-            mb.Entity<Tag>().HasKey(t => t.Name);
+            mb.Entity<Tag>().HasIndex(t => t.Name);
                 
 
 
             mb.Entity<User>().Property(t => t.PresentationName)
                 .HasMaxLength(Values.Entity.UserPresentationNameMaxLength);
 
-            mb.Entity<PostTag>().Property(pt => pt.TagName)
+            mb.Entity<PostTag>().Property(pt => pt.TagId)
                 .HasMaxLength(Values.Entity.TagNameMaxLength);
-            mb.Entity<PostTag>().HasKey(pt => new { pt.TagName, pt.PostId });
+            mb.Entity<PostTag>().HasKey(pt => new { pt.TagId, pt.PostId });
 
             mb.Entity<Image>().Property(r => r.Path)
                 .HasMaxLength(Values.Entity.ResourcePathMaxLength);

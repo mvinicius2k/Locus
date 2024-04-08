@@ -41,9 +41,9 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
     }
 
 
-    public async Task<bool> TryUpdate(TId id, TEntity newEntity)
+    public virtual async Task<bool> TryUpdate(TId id, TEntity newEntity)
     {
-        var entity = _context.Set<TEntity>().Find(IdAsArray(id)) ?? throw new KeyNotFoundException(_describes.KeyNotFound(id));
+        var entity = _context.Set<TEntity>().Find(IdAsArray(id));
         if (entity == null)
             return false;
         _context.Set<TEntity>().Entry(entity).State = EntityState.Detached;

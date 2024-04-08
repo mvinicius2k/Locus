@@ -10,8 +10,6 @@ namespace Tests;
 
 public class TestcontainerFixture : IDisposable
 {
-    private const string StatusRoute = "admin/host/status";
-
     private ICompositeService compositeService;
     private IHostService? dockerHost;
 
@@ -46,7 +44,12 @@ public class TestcontainerFixture : IDisposable
         }
     }
 
-    public async Task<HttpClient> GetClientWhenDone(int attemps = 40, int delayMs = 500)
+    /// <summary>
+    /// Obtém um http quando as funções do functions estão prontas.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception">Quando o número de tentativas foi atingido</exception>
+    public async Task<HttpClient> GetClientWhenDone(int attemps = 80, int delayMs = 500, string statusRoute = "admin/host/status")
     {
         var count = 1;
         var http = new HttpClient
@@ -54,11 +57,11 @@ public class TestcontainerFixture : IDisposable
             BaseAddress = new Uri(TestValues.RootAdress)
         };
 
-        while (count++ <= 40)
+        while (count++ <= attemps)
         {
             try
             {
-                var response = await http.GetAsync(StatusRoute);
+                var response = await http.GetAsync(statusRoute);
                 var content = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode && AzureFunctionsIsRunning(content))
                     return new HttpClient
@@ -83,6 +86,9 @@ public class TestcontainerFixture : IDisposable
 
     }
 
+    /// <summary>
+    /// Processa o json provido pelo admin do azure functions
+    /// </summary>
     private bool AzureFunctionsIsRunning(string statusResponseJson)
     {
         var json = JObject.Parse(statusResponseJson);
@@ -91,7 +97,7 @@ public class TestcontainerFixture : IDisposable
             Assert.Fail("Formato de json irreconhecível: " + statusResponseJson);
         return state.Value<string>() == "Running";
     }
-
+    
     private void EnsureDockerHost()
     {
         if (dockerHost?.State == ServiceRunningState.Running)
