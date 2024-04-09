@@ -12,7 +12,6 @@ public class TagValidator : Shared.TagSoftValidator
     public TagValidator(IDescribes describes, ITagRepository repository) : base(describes)
     {
         _repository = repository;   
-        //RuleFor(t => t).NotNull().WithErrorCode(StatusCodes.Status404NotFound.ToString());
         RuleSet(RuleSetAdd, () =>
         {
             
