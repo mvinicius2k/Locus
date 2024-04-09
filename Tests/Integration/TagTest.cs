@@ -127,6 +127,27 @@ public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
 
     }
 
+    [Fact]
+    public async Task Delete_Tag_ShouldReturn200(){
+
+        var tag = await QuickPopulate.PostTags(_client, new TagFaker().Generate());
+
+        var response = await _client.DeleteAsync(Values.Api.TagDelete.Placeholder(HttpUtility.UrlEncode(tag.Name)));
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        //Verificando se get retorna 404
+        var responseGet = await _client.GetAsync(Values.Api.TagGetByName.Placeholder(tag.Name));
+        responseGet.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Delete_NotExistingTag_ShouldReturn404(){
+
+        var response = await _client.DeleteAsync(Values.Api.TagDelete.Placeholder(HttpUtility.UrlEncode("Essa tag nao existe")));
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        
+    }
+
 
     #region MemberData
     public static TheoryData<TagRequestDTO> ValidTags()

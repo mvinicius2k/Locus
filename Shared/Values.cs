@@ -40,7 +40,7 @@ namespace Shared
             public const string FreeImageHostUrl = $"https://freeimage.host/api/1/upload?key={{key}}";
             
             public const string TagGet = $"Tags-Get";
-            public const string TagGetById = $"Tags-GetByName/{{name}}";
+            public const string TagGetByName = $"Tags-GetByName/{{name}}";
             public const string TagCreate = $"Tags-Add";
             public const string TagRename = $"Tags-Rename/{{name}}";
             public const string TagDelete = $"Tags-Delete/{{name}}";

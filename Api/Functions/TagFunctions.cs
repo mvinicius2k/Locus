@@ -37,9 +37,9 @@ public class TagFunctions : FunctionBase
     }
 
     [Function(nameof(GetByName))]
-    [OpenApiOperation(Values.Api.TagGetById, Description = "Obtem uma única tag correspondente ao nome")]
+    [OpenApiOperation(Values.Api.TagGetByName, Description = "Obtem uma única tag correspondente ao nome")]
     [OpenApiResponseWithBody(HttpStatusCode.OK, MimeMapping.KnownMimeTypes.Json, typeof(TagResponseDTO))]
-    public async ValueTask<IActionResult> GetByName([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.TagGetById)] HttpRequestData req, string name)
+    public async ValueTask<IActionResult> GetByName([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.TagGetByName)] HttpRequestData req, string name)
     {
         var tag = await _repository.GetByName(name);
         if (tag == null)
