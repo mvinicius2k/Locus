@@ -56,6 +56,9 @@ namespace Shared
             public const string PostUpdate = $"Posts-Update/{{id}}";
             public const string PostDelete = $"Posts-Delete/{{id}}";
 
+            public const string UserRegister = $"User-Register";
+            public const string UserSignIn = $"User-SignIn";
+
             
             //public const string TagFunctionsGetQuery = $"?query={{query}}";
         }

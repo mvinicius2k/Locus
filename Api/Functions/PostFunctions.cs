@@ -2,6 +2,7 @@
 using Api.Models;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -18,19 +19,24 @@ public class PostFunctions : FunctionBase<Post, int, PostRequestDTO, PostRespons
 {
     private readonly IPostRepository _repository;
 
-    public PostFunctions(ILogger logger, IDescribes describes, IMapper mapper, IValidator<PostRequestDTO> validator, IPostRepository repository) : base(logger, describes, mapper, validator)
+    public PostFunctions(ILogger<PostFunctions> logger, IDescribes describes, IMapper mapper, IValidator<PostRequestDTO> validator, IPostRepository repository) : base(logger, describes, mapper, validator)
     {
         _repository = repository;
     }
 
+    
+
     [Function("Get-Post-By-Id")]
     [OpenApiOperation(Values.Api.PostGet, Description = "Obtem um único post correspondente ao id")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, MimeMapping.KnownMimeTypes.Json, typeof(PostResponseDTO))]
-    [OpenApiResponseWithBody(HttpStatusCode.UnprocessableEntity, MimeMapping.KnownMimeTypes.Json, typeof(Dictionary<string, List<string>>))]
     [OpenApiResponseWithoutBody(HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.PostGetById)] HttpRequestData req, int id)
         => await ActionGetByIndex(id, _repository.GetById);
 
+    [Function("Create-Post")]
+    [OpenApiOperation(Values.Api.PostCreate, Description = "Cria um post")]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, MimeMapping.KnownMimeTypes.Json, typeof(PostResponseDTO))]
+    [OpenApiResponseWithBody(HttpStatusCode.UnprocessableEntity, MimeMapping.KnownMimeTypes.Json, typeof(Dictionary<string, List<string>>))]
     public async Task<IActionResult> Create([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = Values.Api.PostCreate)] HttpRequestData req)
         => await ActionCreateEntity(req,_repository.Add);
 

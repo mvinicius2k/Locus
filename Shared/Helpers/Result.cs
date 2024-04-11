@@ -7,7 +7,7 @@ public record Result<T>
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; init;}
-    public T Data {get; init;}
+    public T Model {get; init;}
 
     public static Result<T> Success(T data) => new(true, Error.None, data);
 
@@ -18,7 +18,7 @@ public record Result<T>
 
         IsSuccess = isSuccess;
         Error = error;
-        Data = data;
+        Model = data;
         
     }
 

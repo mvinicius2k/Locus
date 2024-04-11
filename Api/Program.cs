@@ -18,6 +18,7 @@ using Shared;
 using System.Composition.Hosting.Core;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Configurations.AppSettings.Extensions;
 
 
 const bool Restart = true;
@@ -27,6 +28,7 @@ var builder = new HostBuilder()
     .ConfigureFunctionsWebApplication(w =>
     {
         w.UseNewtonsoftJson();
+        
       
     })
     .ConfigureServices((hostContext, services) =>
@@ -49,6 +51,8 @@ var builder = new HostBuilder()
 
         //Repositories
         services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         //Validators
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -75,6 +79,12 @@ var builder = new HostBuilder()
                 return Task.CompletedTask;
             };
         });
+        services.AddAuthentication().AddGoogle(googleOpt => {
+            var settings = hostContext.Configuration.GetSection(ApiValues.GoogleOAuthKey).Get<GoogleOAuthSettings>();
+            googleOpt.ClientId = settings.ClientId;
+            googleOpt.ClientSecret = settings.ClientSecret;
+        });
+        services.AddAuthorization();
 
 
     });

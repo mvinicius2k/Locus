@@ -9,5 +9,6 @@ namespace Api.Helpers
     public static class ApiValues
     {
         public const string ConnectionKey = "ConnectionString";
+        public const string GoogleOAuthKey = "Google_OAuth";
     }
 }

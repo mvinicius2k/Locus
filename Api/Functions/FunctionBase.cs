@@ -102,7 +102,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
                 StatusCode = StatusCodes.Status400BadRequest
             };
         }
-        var final = await queryFunc.Invoke(entityQueryProcessed.Data!).ToDynamicArrayAsync();
+        var final = await queryFunc.Invoke(entityQueryProcessed.Model!).ToDynamicArrayAsync();
         return new JsonResult(final)
         {
             StatusCode = StatusCodes.Status200OK
@@ -122,7 +122,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
         => ActionGetByIndex(id, getFunction);
     protected async ValueTask<IActionResult>ActionCreateEntity(HttpRequestData httpRequest, Func<TEntity, ValueTask> addFunction, string[]? validationRulesets = null){
         validationRulesets ??= new string[] { "default" };
-
+        
         var dto = await GetJsonFromBody<TDTORequest>(httpRequest);
 
         if (dto.IsFailure)
@@ -132,7 +132,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
             };
 
 
-        var results = await _validator.ValidateAsync(dto.Data, opt => opt.IncludeRuleSets("default", TagValidator.RuleSetAdd));
+        var results = await _validator.ValidateAsync(dto.Model, opt => opt.IncludeRuleSets("default", TagValidator.RuleSetAdd));
         var modelState = ModelState.FromValidationResult(results);
         if (!modelState.IsValid)
             return new JsonResult(modelState.GroupByProperty())
@@ -140,7 +140,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
                 StatusCode = StatusCodes.Status422UnprocessableEntity
             };
 
-        var entity = _mapper.Map<TDTORequest, TEntity>(dto.Data);
+        var entity = _mapper.Map<TDTORequest, TEntity>(dto.Model);
         await addFunction.Invoke(entity);
 
         var responseDTO = _mapper.Map<TEntity, TDTOResponse>(entity);
@@ -167,7 +167,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
                 StatusCode = StatusCodes.Status404NotFound
             };
 
-        var results = await _validator.ValidateAsync(dto.Data, opt => opt.IncludeRuleSets(validationRuleSets));
+        var results = await _validator.ValidateAsync(dto.Model, opt => opt.IncludeRuleSets(validationRuleSets));
 
         var modelState = ModelState.FromValidationResult(results);
         if (!modelState.IsValid)
@@ -176,7 +176,7 @@ public abstract class FunctionBase<TEntity, TId, TDTORequest, TDTOResponse> wher
                 StatusCode = StatusCodes.Status422UnprocessableEntity
             };
 
-        var entity = _mapper.Map<TDTORequest, TEntity>(dto.Data);
+        var entity = _mapper.Map<TDTORequest, TEntity>(dto.Model);
         await updateFunction.Invoke(entity, indexValue);
 
 

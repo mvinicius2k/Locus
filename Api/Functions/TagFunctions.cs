@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq.Dynamic.Core;
 using System.Net;
+using System.Security.Claims;
 using System.Web;
 using Api.Database;
 using Api.Models;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -24,13 +26,25 @@ namespace Api;
 
 public class TagFunctions : FunctionBase<Tag, int, TagRequestDTO, TagResponseDTO>
 {
-
+    
     private readonly ITagRepository _repository;
 
     public TagFunctions(ILogger<TagFunctions> logger, IDescribes describes, IMapper mapper, ITagRepository repository, IValidator<TagRequestDTO> validator) : base(logger, describes, mapper, validator)
     {
         _repository = repository;
     }
+
+    [Function("Get-Post-Auth"), Authorize]
+    [OpenApiOperation("Get-Post-Auth")]
+    public IActionResult GetPost([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req){
+        var user = req.FunctionContext.GetHttpContext().User;
+        var identifier = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if(identifier == null)
+            return new UnauthorizedObjectResult("Nao");
+        return new OkObjectResult("sim");
+
+    }
+        
 
     [Function("Get-Tag-By-Name")]
     [OpenApiOperation(Values.Api.TagGetByName, Description = "Obtem uma única tag correspondente ao nome")]
