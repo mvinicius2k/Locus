@@ -2,37 +2,52 @@
 using Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared;
+using Shared.Api;
 
 namespace Api;
 
-public class TagRepository : RepositoryBase<Tag, int>, ITagRepository
+public class TagRepository : ITagRepository
 {
-    public TagRepository(Context context, IDescribes describes) : base(context, describes)
+    private readonly Context _context;
+
+    public TagRepository(Context context)
     {
+        _context = context;
     }
 
-    public async ValueTask<bool> DeleteByName(string name)
+    public async ValueTask Add(Tag tag)
+    {
+        _context.Tags.Add(tag);
+        await _context.SaveChangesAsync();  
+    }
+
+    public async ValueTask DeleteByName(string name)
     {
         var entity = await _context.Tags.FirstOrDefaultAsync(t => t.Name == name);    
-        if (entity == null)
-            return false;
+
         _context.Tags.Remove(entity);
         await _context.SaveChangesAsync();
-        return true;
     }
+
+    public async ValueTask<bool> ExistsByName(string name)
+        => await _context.Tags.AnyAsync(t => t.Name == name);
 
     public async ValueTask<Tag?> GetByName(string name)
         => await _context.Tags.FirstOrDefaultAsync(t => t.Name == name);
 
-    public async ValueTask<bool> Rename(string old, string newname)
+    public IQueryable GetWithQuery(IEntityQuery entityQuery)
     {
-        var entity = await _context.Tags.FirstOrDefaultAsync(t => t.Name == old);    
-        if (entity == null)
-            return false;
-        entity.Name = newname;
+        var results = _context.Tags.AsQueryable();
+        return entityQuery.Query(ref results);
+    }
+
+    public async ValueTask UpdateByName(Tag tag, string name)
+    {
+        var entity = await _context.Tags.FirstOrDefaultAsync(t => t.Name == name);    
+        tag.SetId(entity.Id);
+        
         _context.Tags.Update(entity);
         await _context.SaveChangesAsync();
-        return true;
     }
 
 

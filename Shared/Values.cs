@@ -18,6 +18,8 @@ namespace Shared
 
         public static class Entity
         {
+            
+
             public const int GroupNameMaxLength = 64;
             public const int GroupDescriptionMaxLength = 1024;
 
@@ -37,6 +39,8 @@ namespace Shared
 
         public static class Api
         {
+            public const string QueryKeyInQuery = "query";
+
             public const string FreeImageHostUrl = $"https://freeimage.host/api/1/upload?key={{key}}";
             
             public const string TagGet = $"Tags-Get";
@@ -44,7 +48,15 @@ namespace Shared
             public const string TagCreate = $"Tags-Add";
             public const string TagRename = $"Tags-Rename/{{name}}";
             public const string TagDelete = $"Tags-Delete/{{name}}";
-            public const string TagGetQuery = "query";
+            public const string TagGetQuery = QueryKeyInQuery;
+
+            public const string PostGet = $"Posts-Get";
+            public const string PostGetById = $"Posts-GetById/{{id}}";
+            public const string PostCreate = $"Posts-Add";
+            public const string PostUpdate = $"Posts-Update/{{id}}";
+            public const string PostDelete = $"Posts-Delete/{{id}}";
+
+            
             //public const string TagFunctionsGetQuery = $"?query={{query}}";
         }
 

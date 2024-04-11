@@ -23,11 +23,12 @@ public class PostValidator : PostSoftValidator
         
         When(post => post.FeaturedImageId != null, () => {
 
-            RuleFor(post => (int) post.FeaturedImageId)
+            RuleFor(post => (int) post.FeaturedImageId!)
                 .IndexExists(imageRepository.GetById)
-                .WithMessage("");
+                .WithMessage(p => describes.EntityNotFound(nameof(Image), p.FeaturedImageId!));
         });
-            
+        
+        
             
 
     }

@@ -18,14 +18,11 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
         _describes = describes;
     }
 
-    public async Task<bool> TryDelete(TId id)
+    public async ValueTask Delete(TId id)
     {
         var entity = _context.Set<TEntity>().Find(IdAsArray(id));
-        if (entity == null)
-            return false;
         _context.Set<TEntity>().Remove(entity);
         await _context.SaveChangesAsync();
-        return true;
     }
 
     public ValueTask<TEntity?> GetById(TId id)
@@ -41,17 +38,16 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
     }
 
 
-    public virtual async Task<bool> TryUpdate(TId id, TEntity newEntity)
+    public virtual async ValueTask Update(TEntity newEntity, TId id)
     {
         var entity = _context.Set<TEntity>().Find(IdAsArray(id));
-        if (entity == null)
-            return false;
+        
         _context.Set<TEntity>().Entry(entity).State = EntityState.Detached;
         newEntity.SetId(id);
 
         _context.Set<TEntity>().Update(newEntity);
         await _context.SaveChangesAsync();
-        return true;
+        
     }
 
     /// <summary>
@@ -77,6 +73,8 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
             return new object[] { key };
         }
     }
+
+    [Obsolete]
     public static IQueryable Query(IEntityQuery entityQuery, ref IQueryable<TEntity> results)
     {
         if (entityQuery.Filter != null)
@@ -97,11 +95,14 @@ public class RepositoryBase<TEntity, TId> : IRepository<TEntity, TId> where TEnt
         return final.AsQueryable();
     }
 
-    public Task Add(TEntity entity)
+    public async ValueTask Add(TEntity entity)
     {
         _context.Set<TEntity>().Add(entity);
-        return _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
+
+    public async ValueTask<bool> Exists(TId id)
+        => await _context.Set<TEntity>().FindAsync(id) != null;
 
 
 }

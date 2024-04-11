@@ -1,6 +1,12 @@
-﻿namespace Api;
+﻿using Api.Database;
+using Api.Models;
+using Shared;
 
-public class ImageRepository
+namespace Api;
+
+public class ImageRepository : RepositoryBase<Image, int>, IImageRepository
 {
-
+    public ImageRepository(Context context, IDescribes describes) : base(context, describes)
+    {
+    }
 }

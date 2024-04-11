@@ -110,11 +110,11 @@ public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
     }
 
     [Theory,
-    InlineData("tagVálida", "outraVálida"),
-    InlineData("123", "1234"),
-    InlineData("sfdgdfh", "dgfhfj"),
-    InlineData("C#", "C++"),
-    InlineData("k", "k")]
+    InlineData("tag-Válida", "outraVálida"),
+    InlineData("987", "1234"),
+    InlineData("textocomum", "outrotxt"),
+    InlineData("R#", "C++"),
+    InlineData("g", "g")]
     public async Task Rename_Tag_ShouldReturn200(string original, string edit)
     {
         await QuickPopulate.PostTags(_client, new TagRequestDTO { Name = original });
