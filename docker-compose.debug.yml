@@ -20,6 +20,7 @@ services:
       - AZURE_FUNCTIONS_ENVIRONMENT=Development
       - ConnectionString=server=sql-server,1433;User Id=sa;Password=Admin1234;Database=api-db;TrustServerCertificate=true
       - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
+      - google_oauth__client_id=734673970360-larhbhclgnfem0m5honjmueavp4t4k4r.apps.googleusercontent.com__client_secret=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
     entrypoint: sh -c "cd /ApiDebug && pwd && ls && /functions_debugging_cli/func host start --dotnet-isolated-debug --no-build --enable-json-output" #Inicia o azure functions em modo debug
     volumes:
       - C:\Users\marco\Desktop\Code\Locus\Api\bin\Debug\net8.0:/ApiDebug

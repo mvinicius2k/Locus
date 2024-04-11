@@ -16,28 +16,10 @@ using Xunit.Abstractions;
 
 namespace Tests.Integration;
 
-public class TagTest : IClassFixture<TestcontainerFixture>, IAsyncLifetime
+public class TagTest : IntegrationTestFunctionsBase, IClassFixture<TestcontainerFixture>, IAsyncLifetime
 {
-    private readonly ITestOutputHelper _output;
-    private readonly TestcontainerFixture _testcontainer;
-    private HttpClient _client;
-    public TagTest(ITestOutputHelper output, TestcontainerFixture testcontainer)
+    public TagTest(ITestOutputHelper output, TestcontainerFixture testcontainer) : base(output, testcontainer)
     {
-        _output = output;
-
-        _testcontainer = testcontainer;
-
-    }
-
-    public async Task InitializeAsync()
-    {
-        _client = await _testcontainer.GetClientWhenDone();
-    }
-
-    public Task DisposeAsync()
-    {
-        
-        return Task.CompletedTask;
     }
 
     [Fact]
