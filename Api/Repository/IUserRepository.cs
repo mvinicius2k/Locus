@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Api.Database;
+using Api.Helpers;
 using Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -112,10 +113,10 @@ public class UserRepository : IUserRepository
     {
         var children = Environment.GetEnvironmentVariables();
         
-        #warning Armazenar nas variáveis de ambiente
-        var jwtSecret = "JWTAuthenticationHIGHsecuredPasswordVVVp1OH7Xzyr";
-        var validAudience = "http://localhost:7071";
-        var validIssuer = "http://localhost:7071";
+
+        var jwtSecret = Environment.GetEnvironmentVariable(ApiValues.GoogleOAuthSecretEnvKey);
+        var validAudience = Environment.GetEnvironmentVariable(ApiValues.JWTValidAudienceEnvKey);
+        var validIssuer = Environment.GetEnvironmentVariable(ApiValues.JWTValidIssuerEnvKey);
 
 
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)) ?? throw new KeyNotFoundException("Variável de ambiente nao encontrada");

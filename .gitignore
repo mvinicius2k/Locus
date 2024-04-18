@@ -3,6 +3,7 @@
 
 # Azure Functions localsettings file
 local.settings.json
+docker-compose.local.yml
 
 # User-specific files
 *.suo

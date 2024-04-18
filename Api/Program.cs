@@ -19,15 +19,32 @@ using System.Composition.Hosting.Core;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Configurations.AppSettings.Extensions;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Extensions;
 
 
 const bool Restart = true;
 
+//Todos os pontos de functions que são necessários a autenticação
+MethodInfo[] allAuthMethods  = Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .SelectMany(t => t.GetMethods())
+                .Where(m => m.ExistsCustomAttribute<AuthRequiredAttribute>())
+                .ToArray();
+
+
 var builder = new HostBuilder()
-    
     .ConfigureFunctionsWebApplication(w =>
     {
         w.UseNewtonsoftJson();
+        
+        //Middleware de auth
+        w.UseWhen<AuthMiddleware>(context => {
+            FunctionDefinition fdef = context.FunctionDefinition;
+            var match = allAuthMethods.Select(m => m.GetCustomAttribute<FunctionAttribute>()).Any(f => f.Name == fdef.Name);
+            return match;
+            
+        });
+        //w.UseMiddleware<AuthMiddleware>();
         
       
     })
@@ -41,7 +58,7 @@ var builder = new HostBuilder()
         services.AddDbContext<Context>(opt =>
         {
             var children = Environment.GetEnvironmentVariables();
-            var connectionString = hostContext.Configuration.GetSection(ApiValues.ConnectionKey).Value ?? throw new Exception("String de conexão inválida");
+            var connectionString = hostContext.Configuration.GetSection(ApiValues.ConnectionEnvKey).Value ?? throw new Exception("String de conexão inválida");
             opt.UseSqlServer(connectionString);
         });
         services.AddScoped<DbInit>();
@@ -80,7 +97,7 @@ var builder = new HostBuilder()
             };
         });
         services.AddAuthentication().AddGoogle(googleOpt => {
-            var settings = hostContext.Configuration.GetSection(ApiValues.GoogleOAuthKey).Get<GoogleOAuthSettings>();
+            var settings = hostContext.Configuration.GetSection(ApiValues.GoogleOAuthCallbackEnvKey).Get<GoogleOAuthSettings>();
             googleOpt.ClientId = settings.ClientId;
             googleOpt.ClientSecret = settings.ClientSecret;
         });

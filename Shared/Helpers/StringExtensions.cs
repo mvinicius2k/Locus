@@ -51,7 +51,7 @@ namespace Shared.Helpers
         }
 
         /// <summary>
-        /// Cria uma query de url com os itens dividos por &amp;
+        /// Cria uma query de url com os itens dividos por '&amp;' , iniciando com o prefixo '?'
         /// </summary>
         /// <param name="nameValue"></param>
         /// <returns></returns>

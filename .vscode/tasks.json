@@ -2,12 +2,10 @@
 	"version": "2.0.0",
 	"tasks": [
 		
-		//Docker
-
 		{
             "label": "Build Functions and Compose-Up",
             "type": "shell",
-            "command": "docker compose -f docker-compose.debug.yml  up -d --build",
+            "command": "docker compose -f docker-compose.debug.yml -f docker-compose.local.yml  up -d --build",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -17,12 +15,17 @@
 		{
             "label": "No Attach Build Functions and Compose-Up",
             "type": "shell",
-            "command": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.noattach.yml up -d --build",
+            "command": "docker compose -f docker-compose.debug.yml -f docker-compose.debug.noattach.yml -f docker-compose.local.yml up -d --build",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": ["build (functions)"]
+            "dependsOn": ["build (functions)","Kill all"]
+        },
+		{
+            "label": "Kill all",
+            "type": "shell",
+            "command" : "& './kill func.ps1'",
         },
         
 		{

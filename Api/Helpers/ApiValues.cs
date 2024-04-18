@@ -8,7 +8,13 @@ namespace Api.Helpers
 {
     public static class ApiValues
     {
-        public const string ConnectionKey = "ConnectionString";
-        public const string GoogleOAuthKey = "Google_OAuth";
+        public const string ConnectionEnvKey = "ConnectionString";
+        public const string GoogleOAuthCallbackEnvKey = "GoogleOAuthCallBack";
+        public const string GoogleOAuthSecretEnvKey = "OAuthSecret";
+        public const string JWTValidAudienceEnvKey = "JWTValidAudience";
+        public const string JWTValidIssuerEnvKey = "JWTValidIssuer";
+        public const string GoogleOAuthClientIdEnvKey = "OAuthId";
+
+
     }
 }

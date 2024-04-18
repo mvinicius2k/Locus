@@ -18,8 +18,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - AZURE_FUNCTIONS_ENVIRONMENT=Development
-      - ConnectionString=server=sql-server,1433;User Id=sa;Password=Admin1234;Database=api-db;TrustServerCertificate=true
       - FUNCTIONS_WORKER_RUNTIME=dotnet-isolated
+
+
     entrypoint: sh -c "cd /ApiDebug && pwd && ls && /functions_debugging_cli/func host start --dotnet-isolated-debug --no-build --enable-json-output" #Inicia o azure functions em modo debug
     volumes:
       - C:\Users\marco\Desktop\Code\Locus\Api\bin\Debug\net8.0:/ApiDebug

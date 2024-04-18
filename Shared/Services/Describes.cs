@@ -60,6 +60,9 @@ public class Describes : IDescribes
 
     public string UnknownJsonFormat()
         => "Não foi possível serializar, formato irrenhecível";
+
+    public string LoginRequired()
+        => "Login necessário, acesse a Url para entrar";
 }
 
 public interface IDescribes
@@ -85,5 +88,6 @@ public interface IDescribes
     public  string BadBodyRequest();
     public string InvalidText(string validRules);
     public string UnknownJsonFormat();
+    public string LoginRequired();
         
 }

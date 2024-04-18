@@ -39,6 +39,9 @@ namespace Shared
 
         public static class Api
         {
+            public  const string GoogleLoginUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+
+            public const string HeaderAuthorizationKey = "Authorization";
             public const string QueryKeyInQuery = "query";
 
             public const string FreeImageHostUrl = $"https://freeimage.host/api/1/upload?key={{key}}";
@@ -58,6 +61,8 @@ namespace Shared
 
             public const string UserRegister = $"User-Register";
             public const string UserSignIn = $"User-SignIn";
+            public const string UserIsAuthenticated = $"User-IsAuthenticated";
+            public const string UserFoo = $"User-Foo";
 
             
             //public const string TagFunctionsGetQuery = $"?query={{query}}";

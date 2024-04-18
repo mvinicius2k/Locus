@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using Api.Models;
 using AutoMapper;
 using FluentValidation;
@@ -24,7 +25,7 @@ public class UserFunctions : FunctionBase<User, string, UserRequestDTO, UserResp
     }
 
     [Function("Register-User")]
-    [OpenApiOperation(Values.Api.PostCreate, Description = "Cria um post")]
+    [OpenApiOperation(Values.Api.UserRegister, Description = "Cria um post")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, MimeMapping.KnownMimeTypes.Json, typeof(UserResponseDTO))]
     [OpenApiResponseWithBody(HttpStatusCode.UnprocessableEntity, MimeMapping.KnownMimeTypes.Json, typeof(Dictionary<string, List<string>>))]
     public async Task<IActionResult> Create([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = Values.Api.UserRegister)] HttpRequestData req)
@@ -48,7 +49,7 @@ public class UserFunctions : FunctionBase<User, string, UserRequestDTO, UserResp
     }
 
     [Function("SignIn-User")]
-    [OpenApiOperation(Values.Api.PostCreate, Description = "Cria um post")]
+    [OpenApiOperation(Values.Api.UserSignIn, Description = "Cria um post")]
     [OpenApiResponseWithBody(statusCode: HttpStatusCode.Created, MimeMapping.KnownMimeTypes.Json, typeof(JwtTokenResponseDTO))]
     [OpenApiResponseWithBody(HttpStatusCode.UnprocessableEntity, MimeMapping.KnownMimeTypes.Json, typeof(Dictionary<string, List<string>>))]
     public async Task<IActionResult> SignIn([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = Values.Api.UserSignIn)] HttpRequestData req)
@@ -76,6 +77,25 @@ public class UserFunctions : FunctionBase<User, string, UserRequestDTO, UserResp
 
 
     }
+
+    [Function("IsAuthenticated-User")]
+    [AuthRequired]
+    [OpenApiOperation(Values.Api.UserIsAuthenticated, Description = "Verifica se o usuário está logado")]
+    public async Task<IActionResult> IsAuthenticated([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.UserIsAuthenticated)] HttpRequestData req)
+    {
+        var user = req.FunctionContext.GetHttpContext().User;
+        var identifier = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if(identifier == null)
+            return new UnauthorizedObjectResult("Nome nao encontrado");
+        return new OkObjectResult("POde ir");
+    }
+    
+    [Function("Foo-User")]
+    [OpenApiOperation(Values.Api.UserFoo, Description = "Faz nada")]
+    public async Task<IActionResult> Foo([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Values.Api.UserFoo)] HttpRequestData req)
+        => new OkObjectResult("Ok");
+
+
 }
 
 
